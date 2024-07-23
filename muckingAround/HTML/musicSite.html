@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        h1 {
+            text-align: center;
+            font-size: 40px;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        div {
+            text-align: center;
+        }
+
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Styling the body */
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Styling the background image by 
+        giving its url and position */
+        .container {
+            height: 100vh;
+            width: 100%;
+            background-image: url('https://i.imgur.com/qR2j0hB.jpeg');
+
+            /* Image used: */
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        /* Styling the list tags to the 
+        right of the navigation bar */
+        .nav {
+            text-align: right;
+            padding-right: 10px;
+        }
+
+        .hoverdesign {
+            color: black;
+            transition-duration: 0.4s;
+        }
+
+        .hoverdesign:hover {
+            background-color: black;
+            color: white;
+            text-align: right;
+            transition-duration: 0.4s;
+        }
+
+        .nav li {
+            display: inline;
+            list-style: none;
+        }
+
+        /* Styling the anchor tags of 
+        the navigation bar */
+        .nav a {
+            height: 50px;
+            line-height: 50px;
+            font-size: 1rem;
+            font-weight: 550;
+            display: inline-block;
+            padding: 5px 20px;
+            color: black;
+            text-decoration: none;
+        }
+
+        /* Giving position and margin 
+        to the content-div */
+        .content {
+            width: 100%;
+            position: absolute;
+            top: 25%;
+        }
+
+        .content2 {
+            width: 100%;
+            position: absolute;
+            top: 35%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .content3 {
+            display: block;
+            margin-top: 20px;
+            width: 200px;
+            height: 200px;
+        }
+
+        /* Styling the left-col by 
+        giving margin */
+        .left-col {
+            margin-left: 11%;
+        }
+
+        /* Styling the my sound placed 
+        in the left-col */
+        .left-col h1 {
+            font-size: 50px;
+            color: black;
+        }
+
+        /* Styling the right-col */
+        .right-col {
+            float: right;
+            margin-right: 10%;
+            margin-top: -5%;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Styling the text in the right-col */
+        .right-col p {
+            font-size: 21px;
+            color: black;
+            font-weight: 650;
+            margin-right: 20px;
+        }
+
+        /* Styling the cursor type 
+        of the icon to pointer */
+        #icon {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <ul class="nav">
+            <li><a class="hoverdesign" href="https://mail.google.com/mail/u/0/#inbox?compose=DmwnWrRtsNPfjrjzwwHRRKkKFfTXfFHXNRMVFXHdfHjMHhFNvBkJgkkfjMWDTNwlTDFjHzGpLGgB" target="_blank">CONTACT</a></li>
+            <li><a class="hoverdesign" href="#">ABOUT</a></li>
+            <li><a class="hoverdesign" href="#">ARTISTS</a></li>
+            <li><a class="hoverdesign" href="#">MUSIC</a></li>
+            <li><a class="hoverdesign" href="#">HOME</a></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <div>
+            <h1>MY SOUNDS</h1>
+        </div>
+    </div>
+    <div class="content2">
+        <div>
+            <h1>TAKE A LISTEN:</h1>
+        </div>
+        <a href="https://www.spotify.com" target="_blank">
+            <img src="https://i.imgur.com/S8WaBwV.png" class="content3 center" alt="Centered Image">
+        </a>
+    </div>
+    <script>
+        document.getElementById('spotifyLink').addEventListener('click', function(event) {
+            event.preventDefault();
+            window.open('https://www.spotify.com', '_blank');
+        });
+    </script>
+</body>
+
+</html>
