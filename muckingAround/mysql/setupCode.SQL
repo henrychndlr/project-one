@@ -14,10 +14,10 @@ DROP TABLE item;
  
 CREATE TABLE card
 (card_id INT AUTO_INCREMENT PRIMARY KEY,
-card_number VARCHAR(20) not null,
-expiration_date DATE not null,
-cvc INT(3) not null,
-person_id INT not null );
+card_number VARCHAR(20) NOT NULL,
+expiration_date DATE NOT NULL,
+cvc INT(3) NOT NULL,
+person_id INT NOT NULL );
  
 insert into card (card_number,expiration_date,cvc,holder_name) values ('0123 4567 8987 6543','24-06-01','123','Henry Chandler');
  
@@ -33,9 +33,9 @@ CREATE TABLE order_line
 (order_line_id INT AUTO_INCREMENT PRIMARY KEY,
 order_header_id INT NOT NULL,
 item_id INT NOT NULL, 
-cost INT NOT NULL);
+cost INT NOT NULL );
  
- insert into order_line (item_id, order_header_id, cost) 
+insert into order_line (item_id, order_header_id, cost) 
 
 CREATE TABLE order_header
 (order_header_id INT AUTO_INCREMENT PRIMARY KEY,
