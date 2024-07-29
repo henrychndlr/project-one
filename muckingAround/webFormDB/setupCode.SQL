@@ -59,12 +59,14 @@
 -- age INT NOT NULL,
 -- card_id INT NOT NULL );
 
-DROP TABLE IF EXISTS order_line;
-DROP TABLE IF EXISTS order_header;
-DROP TABLE IF EXISTS card;
-DROP TABLE IF EXISTS person;
-DROP TABLE IF EXISTS address;
-DROP TABLE IF EXISTS item;
+
+
+-- DROP TABLE IF EXISTS order_line;
+-- DROP TABLE IF EXISTS order_header;
+-- DROP TABLE IF EXISTS card;
+-- DROP TABLE IF EXISTS person;
+-- DROP TABLE IF EXISTS address;
+-- DROP TABLE IF EXISTS item;
 
 -- Show all foreign key constraints and delete them:
 
@@ -79,6 +81,19 @@ DROP TABLE IF EXISTS item;
 
 -- ALTER TABLE tableName DROP FOREIGN KEY foreign_key_constraint_name;
 
+
+
+
+
+--Or if you dont wanna destroy all the key constraints, do:
+SET FOREIGN_KEY_CHECKS = 0
+TRUNCATE TABLE order_line;
+TRUNCATE TABLE card;
+TRUNCATE TABLE address;
+TRUNCATE TABLE item;
+TRUNCATE TABLE person;
+TRUNCATE TABLE order_header;
+SET FOREIGN_KEY_CHECKS = 1
 
 CREATE TABLE address (
     address_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -172,6 +187,37 @@ VALUES (1, '2024-06-01', 1, 20.00);
 INSERT INTO order_line (order_header_id, item_id, cost) 
 VALUES (1, 1, 20.00);
 
+To view these tables together once information has been put in them, use:
+SELECT
+    p.person_id,
+    p.name AS person_name,
+    a.first_line,
+    a.second_line,
+    a.county,
+    a.postcode,
+    a.country,
+    c.card_number,
+    c.expiration_date,
+    c.cvc,
+    oh.order_header_id,
+    oh.date AS order_date,
+    oh.total_cost AS order_total_cost,
+    i.item_id,
+    i.item_name,
+    i.description AS item_description,
+    ol.cost AS line_cost,
+    ol.order_line_id
+INTO OUTFILE '/home/henry/Desktop/files/coding/project-one/muckingAround/webFormDB/totaltables.txt'
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+FROM
+    person p
+    LEFT JOIN address a ON p.address_id = a.address_id
+    LEFT JOIN card c ON p.card_id = c.card_id
+    LEFT JOIN order_header oh ON p.person_id = oh.person_id
+    LEFT JOIN order_line ol ON oh.order_header_id = ol.order_header_id
+    LEFT JOIN item i ON ol.item_id = i.item_id;
 
 -- Ideas - add website which is a form of some type, asks you to insert this information. Then adds it
 -- to the tables, and there needs to be a little bit of python, so when a new form is submitted, the 

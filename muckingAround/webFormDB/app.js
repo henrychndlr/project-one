@@ -28,6 +28,13 @@ app.get('/', (req, res) => {
 app.post('/submit-order', (req, res) => {
     const { person_name, person_age, first_line, second_line, county, postcode, country, card_number, expiration_date, cvc, item_name, item_description, item_cost } = req.body;
 
+    // Validate and parse the expiration date
+    const [expMonth, expYear] = expiration_date.split('/');
+    if (!expMonth || !expYear || isNaN(expMonth) || isNaN(expYear) || expMonth < 1 || expMonth > 12) {
+        return res.status(400).send('Invalid expiration date format.');
+    }
+    const expirationDateFormatted = `20${expYear}-${expMonth}-01`;
+
     if (!person_name || !person_age || !first_line || !second_line || !county || !postcode || !country || !card_number || !expiration_date || !cvc || !item_name || !item_description || !item_cost) {
         return res.status(400).send('All fields are required.');
     }
@@ -46,7 +53,7 @@ app.post('/submit-order', (req, res) => {
 
             // Insert card
             const cardQuery = "INSERT INTO card (card_number, expiration_date, cvc, person_id) VALUES (?, ?, ?, ?)";
-            db.query(cardQuery, [card_number, expiration_date, cvc, person_id], (err, result) => {
+            db.query(cardQuery, [card_number, expirationDateFormatted, cvc, person_id], (err, result) => {
                 if (err) throw err;
                 const card_id = result.insertId;
 
@@ -83,5 +90,5 @@ app.post('/submit-order', (req, res) => {
 
 // Start the server
 app.listen(3000, () => {
-    console.log('Server is running on port 3000. Use http://localhost:3000/ to access it.')
+    console.log('Server is running on port 3000. Use http://localhost:3000/ to access it.');
 });
