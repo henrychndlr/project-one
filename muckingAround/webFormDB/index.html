@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden; /* Prevents scrolling on the body */
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            overflow: auto; /* Allows scrolling if content overflows */
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto; /* Allows vertical scrolling if content overflows */
+            max-height: 90vh; /* Limits the height of the container to 90% of viewport height */
+        }
+        h1, h2 {
+            margin: 0 0 20px 0;
+        }
+        input, textarea {
+            margin-bottom: 10px;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <title>Order Form</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Place Your Order</h1>
+        <form action="/submit-order" method="post">
+            <h2>Person Details</h2>
+            Name: <input type="text" name="person_name" required><br>
+            Age: <input type="number" name="person_age" required><br>
+            
+            <h2>Address Details</h2>
+            First Line: <input type="text" name="first_line" required><br>
+            Second Line: <input type="text" name="second_line" required><br>
+            County: <input type="text" name="county" required><br>
+            Postcode: <input type="text" name="postcode" required><br>
+            Country: <input type="text" name="country" required><br>
+
+            <h2>Card Details</h2>
+            Card Number: <input type="text" name="card_number" required><br>
+            Expiration Date: <input type="date" name="expiration_date" required><br>
+            CVC: <input type="number" name="cvc" required><br>
+
+            <h2>Order Details</h2>
+            Item Name: <input type="text" name="item_name" required><br>
+            Item Description: <textarea name="item_description" required></textarea><br>
+            Item Cost: <input type="number" step="0.01" name="item_cost" required><br>
+
+            <input type="submit" value="Submit Order">
+        </form>
+    </div>
+</body>
+</html>

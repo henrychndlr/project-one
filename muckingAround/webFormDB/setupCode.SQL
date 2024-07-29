@@ -82,11 +82,11 @@ DROP TABLE IF EXISTS item;
 
 CREATE TABLE address (
     address_id INT AUTO_INCREMENT PRIMARY KEY,
-    first_line VARCHAR(100),
-    second_line VARCHAR(100),
-    county VARCHAR(50),
-    postcode VARCHAR(20),
-    country VARCHAR(50)
+    first_line VARCHAR(100) NOT NULL,
+    second_line VARCHAR(100) NOT NULL,
+    county VARCHAR(50) NOT NULL,
+    postcode VARCHAR(20) NOT NULL,
+    country VARCHAR(50) NOT NULL
 );
 
 
@@ -178,6 +178,15 @@ VALUES (1, 1, 20.00);
 -- value of order_header_id, item_id, address_id, person_id and card_id all match with each other and
 -- increase by 1 every time a new form is submitted. Makes it so a table cant have two different sets
 -- of info with the same table_id  
+
+
+
+
+
+
+
+
+
 
 --Example tables and foreign key constraints
 

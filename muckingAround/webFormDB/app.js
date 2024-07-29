@@ -1,0 +1,87 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const mysql = require('mysql2');
+
+// Create Express app
+const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Create MySQL connection
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'god',
+    password: 'god',
+    database: 'henrydb'
+});
+
+db.connect((err) => {
+    if (err) throw err;
+    console.log('Connected to database');
+});
+
+// Serve the form HTML
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
+
+// Handle form submission
+app.post('/submit-order', (req, res) => {
+    const { person_name, person_age, first_line, second_line, county, postcode, country, card_number, expiration_date, cvc, item_name, item_description, item_cost } = req.body;
+
+    if (!person_name || !person_age || !first_line || !second_line || !county || !postcode || !country || !card_number || !expiration_date || !cvc || !item_name || !item_description || !item_cost) {
+        return res.status(400).send('All fields are required.');
+    }
+
+    // Insert address
+    const addressQuery = "INSERT INTO address (first_line, second_line, county, postcode, country) VALUES (?, ?, ?, ?, ?)";
+    db.query(addressQuery, [first_line, second_line, county, postcode, country], (err, result) => {
+        if (err) throw err;
+        const address_id = result.insertId;
+
+        // Insert person
+        const personQuery = "INSERT INTO person (address_id, name, age, card_id) VALUES (?, ?, ?, NULL)";
+        db.query(personQuery, [address_id, person_name, person_age], (err, result) => {
+            if (err) throw err;
+            const person_id = result.insertId;
+
+            // Insert card
+            const cardQuery = "INSERT INTO card (card_number, expiration_date, cvc, person_id) VALUES (?, ?, ?, ?)";
+            db.query(cardQuery, [card_number, expiration_date, cvc, person_id], (err, result) => {
+                if (err) throw err;
+                const card_id = result.insertId;
+
+                // Update person with card_id
+                const updatePersonQuery = "UPDATE person SET card_id = ? WHERE person_id = ?";
+                db.query(updatePersonQuery, [card_id, person_id], (err, result) => {
+                    if (err) throw err;
+
+                    // Insert item
+                    const itemQuery = "INSERT INTO item (description, cost, item_name) VALUES (?, ?, ?)";
+                    db.query(itemQuery, [item_description, item_cost, item_name], (err, result) => {
+                        if (err) throw err;
+                        const item_id = result.insertId;
+
+                        // Insert order header
+                        const orderHeaderQuery = "INSERT INTO order_header (person_id, date, address_id, total_cost) VALUES (?, NOW(), ?, ?)";
+                        db.query(orderHeaderQuery, [person_id, address_id, item_cost], (err, result) => {
+                            if (err) throw err;
+                            const order_header_id = result.insertId;
+
+                            // Insert order line
+                            const orderLineQuery = "INSERT INTO order_line (order_header_id, item_id, cost) VALUES (?, ?, ?)";
+                            db.query(orderLineQuery, [order_header_id, item_id, item_cost], (err, result) => {
+                                if (err) throw err;
+                                res.send('Order placed successfully!');
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+});
+
+// Start the server
+app.listen(3000, () => {
+    console.log('Server is running on port 3000. Use http://localhost:3000/ to access it.')
+});
