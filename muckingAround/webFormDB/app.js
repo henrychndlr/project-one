@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 
 // Handle form submission
 app.post('/submit-order', (req, res) => {
-    const { person_name, person_age, first_line, second_line, county, postcode, country, card_number, expiration_date, cvc, item_name, item_description, item_cost } = req.body;
+    const { person_name, person_age, person_email, first_line, second_line, county, postcode, country, card_number, expiration_date, cvc, item_name, item_description, item_cost } = req.body;
 
     // Validate and parse the expiration date
     const [expMonth, expYear] = expiration_date.split('/');
@@ -35,7 +35,7 @@ app.post('/submit-order', (req, res) => {
     }
     const expirationDateFormatted = `20${expYear}-${expMonth}-01`;
 
-    if (!person_name || !person_age || !first_line || !second_line || !county || !postcode || !country || !card_number || !expiration_date || !cvc || !item_name || !item_description || !item_cost) {
+    if (!person_name || !person_age || !person_email || !first_line || !second_line || !county || !postcode || !country || !card_number || !expiration_date || !cvc || !item_name || !item_description || !item_cost) {
         return res.status(400).send('All fields are required.');
     }
 
@@ -46,8 +46,8 @@ app.post('/submit-order', (req, res) => {
         const address_id = result.insertId;
 
         // Insert person
-        const personQuery = "INSERT INTO person (address_id, name, age, card_id) VALUES (?, ?, ?, NULL)";
-        db.query(personQuery, [address_id, person_name, person_age], (err, result) => {
+        const personQuery = "INSERT INTO person (address_id, name, age, email, card_id) VALUES (?, ?, ?, ?, NULL)";
+        db.query(personQuery, [address_id, person_name, person_age, person_email], (err, result) => {
             if (err) throw err;
             const person_id = result.insertId;
 
@@ -79,6 +79,7 @@ app.post('/submit-order', (req, res) => {
                             db.query(orderLineQuery, [order_header_id, item_id, item_cost], (err, result) => {
                                 if (err) throw err;
                                 res.send('Order placed successfully!');
+                                console.log('Order placed successfully!');
                             });
                         });
                     });

@@ -86,14 +86,14 @@
 
 
 --Or if you dont wanna destroy all the key constraints, do:
-SET FOREIGN_KEY_CHECKS = 0
+SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE order_line;
 TRUNCATE TABLE card;
 TRUNCATE TABLE address;
 TRUNCATE TABLE item;
 TRUNCATE TABLE person;
 TRUNCATE TABLE order_header;
-SET FOREIGN_KEY_CHECKS = 1
+SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE address (
     address_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -207,10 +207,7 @@ SELECT
     i.description AS item_description,
     ol.cost AS line_cost,
     ol.order_line_id
-INTO OUTFILE '/home/henry/Desktop/files/coding/project-one/muckingAround/webFormDB/totaltables.txt'
-FIELDS TERMINATED BY ','
-ENCLOSED BY '"'
-LINES TERMINATED BY '\n'
+INTO OUTFILE '/tmp/totaltables.txt'
 FROM
     person p
     LEFT JOIN address a ON p.address_id = a.address_id
