@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
+const nodemailer = require('nodemailer');
 
 // Create Express app
 const app = express();
@@ -79,7 +80,32 @@ app.post('/submit-order', (req, res) => {
                             db.query(orderLineQuery, [order_header_id, item_id, item_cost], (err, result) => {
                                 if (err) throw err;
                                 res.send('Order placed successfully!');
+                                res.send('An order will be emailed to you momentarily.');
                                 console.log('Order placed successfully!');
+
+                                // Send confirmation email
+                                const transporter = nodemailer.createTransport({
+                                    service: 'gmail',
+                                    auth: {
+                                        user: 'orderconfirmationmailer@gmail.com',
+                                        pass: 'qgot lzel eonq igal'
+                                    }
+                                });
+
+                                const emailOptions = {
+                                    from: 'orderconfirmationmailer@gmail.com',
+                                    to: person_email,
+                                    subject: 'Order Confirmation',
+                                    text: `Thank you, ${person_name}, for your order. Your order details: \n\nItem: ${item_name}\nDescription: ${item_description}\nCost: ${item_cost}`
+                                };
+
+                                transporter.sendMail(emailOptions, (error, info) => {
+                                    if (error) {
+                                        console.error(`Error sending email: ${error}`);
+                                        return;
+                                    }
+                                    console.log(`Email sent: ${info.response}`);
+                                });
                             });
                         });
                     });
