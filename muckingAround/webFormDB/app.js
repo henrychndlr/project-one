@@ -80,7 +80,6 @@ app.post('/submit-order', (req, res) => {
                             db.query(orderLineQuery, [order_header_id, item_id, item_cost], (err, result) => {
                                 if (err) throw err;
                                 res.send('Order placed successfully!');
-                                res.send('An order will be emailed to you momentarily.');
                                 console.log('Order placed successfully!');
 
                                 // Send confirmation email
