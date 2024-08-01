@@ -31,7 +31,7 @@
         h1, h2 {
             margin: 0 0 20px 0;
         }
-        input, textarea {
+        input, textarea, select {
             margin-bottom: 10px;
             width: 100%;
             box-sizing: border-box;
@@ -52,9 +52,8 @@
             background-color: #0056b3;
         }
     </style>
-    <title>Order Form</title>
 </head>
-<body>  
+<body>
     <div class="container">
         <h1>Place Your Order</h1>
         <form action="/submit-order" method="post">
@@ -62,26 +61,28 @@
             Name: <input type="text" name="person_name" required><br>
             Age: <input type="number" name="person_age" required><br>
             Email: <input type="text" name="person_email" required><br>
-            
+ 
             <h2>Address Details</h2>
             First Line: <input type="text" name="first_line" required><br>
             Second Line: <input type="text" name="second_line" required><br>
             County: <input type="text" name="county" required><br>
             Postcode: <input type="text" name="postcode" required><br>
             Country: <input type="text" name="country" required><br>
-
+ 
             <h2>Card Details</h2>
             Card Number: <input type="text" name="card_number" required><br>
             <label for="expiration_date">Expiration Date (MM/YY):</label>
             <input type="text" id="expiration_date" name="expiration_date" placeholder="MM/YY" required pattern="(0[1-9]|1[0-2])\/[0-9]{2}">
-
             CVC: <input type="number" name="cvc" required><br>
-
+ 
             <h2>Order Details</h2>
-            Item Name: <input type="text" name="item_name" required><br>
-            Item Description: <textarea name="item_description" required></textarea><br>
-            Item Cost: <input type="number" step="0.01" name="item_cost" required><br>
-
+            Item Name: 
+            <select id="item_select" name="item_id" required>
+                <option value="">Select an item</option>
+            </select><br>
+            Item Description: <textarea id="item_description" name="item_description" readonly required></textarea><br>
+            Item Cost: <input type="number" step="0.01" id="item_cost" name="item_cost" readonly required><br>
+ 
             <input type="submit" value="Submit Order">
         </form>
     </div>
@@ -92,6 +93,35 @@
                 e.target.value = input + '/';
             }
         });
-    </script>      
+ 
+        // Fetch items from the server
+        fetch('/items')
+            .then(response => response.json())
+            .then(items => {
+                const itemSelect = document.getElementById('item_select');
+                items.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.item_id;
+                    option.textContent = item.item_name;
+                    itemSelect.appendChild(option);
+                });
+            });
+ 
+        // Fetch item details when an item is selected
+        document.getElementById('item_select').addEventListener('change', function () {
+            const itemId = this.value;
+            if (itemId) {
+                fetch(`/item-details?id=${itemId}`)
+                    .then(response => response.json())
+                    .then(item => {
+                        document.getElementById('item_description').value = item.description;
+                        document.getElementById('item_cost').value = item.cost;
+                    });
+            } else {
+                document.getElementById('item_description').value = '';
+                document.getElementById('item_cost').value = '';
+            }
+        });
+    </script>
 </body>
 </html>

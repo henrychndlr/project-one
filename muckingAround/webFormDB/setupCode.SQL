@@ -128,6 +128,7 @@ CREATE TABLE person (
     name VARCHAR(100) NOT NULL,
     age INT NOT NULL,
     card_id INT,
+    email VARCHAR(50),
     CONSTRAINT fk_person_address FOREIGN KEY (address_id) REFERENCES address(address_id)
 );
 
