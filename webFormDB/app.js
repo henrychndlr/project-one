@@ -88,7 +88,7 @@ app.post('/submit-signup', async (req, res) => {
     }
 });
 
-app.post('/submit-signin', (req, res) => {
+app.post('/submit-signin', async (req, res) => {
     const { email, password } = req.body;
 
     const query = 'SELECT person_id, password FROM person WHERE email = ?';
@@ -106,7 +106,18 @@ app.post('/submit-signin', (req, res) => {
         }
 
         req.session.userId = user.person_id; // Set user session
-        res.redirect('/place-order');
+        res.redirect('/');
+    });
+});
+
+// Handle sign out
+app.post('/signout', (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).send('Failed to sign out');
+        }
+        res.clearCookie('connect.sid'); // Clear the session cookie
+        res.sendStatus(200); // Send a success response
     });
 });
 

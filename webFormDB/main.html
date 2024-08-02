@@ -35,7 +35,7 @@
             display: flex;
             gap: 10px; /* Adds space between the links */
         }
-        .links a {
+        .links a, .links button {
             padding: 10px 20px;
             font-size: 1em;
             text-decoration: none;
@@ -43,8 +43,10 @@
             background: #0056b3;
             border-radius: 4px;
             transition: background 0.3s, transform 0.3s;
+            border: none;
+            cursor: pointer;
         }
-        .links a:hover {
+        .links a:hover, .links button:hover {
             background: #003d7a;
             transform: scale(1.03);
         }
@@ -78,7 +80,7 @@
 <body>
     <div class="header">
         <div class="links" id="auth-links">
-            <!-- Sign Up and Sign In buttons will be added/removed here -->
+            <!-- Sign Up, Sign In, and Sign Out buttons will be added/removed here -->
         </div>
         <h1>Welcome to Our Main Page</h1>
         <p>Effortlessly manage your orders and account.</p>
@@ -97,8 +99,10 @@
                 const authLinks = document.getElementById('auth-links');
                 
                 if (data.loggedIn) {
-                    // User is logged in, hide Sign Up and Sign In buttons
-                    authLinks.innerHTML = '';
+                    // User is logged in, show Sign Out button
+                    authLinks.innerHTML = `
+                        <button id="signout-button">Sign Out</button>
+                    `;
                 } else {
                     // User is not logged in, show Sign Up and Sign In buttons
                     authLinks.innerHTML = `
@@ -111,8 +115,27 @@
             }
         }
 
-        // Check login status when the page loads
-        checkLoginStatus();
+        // Function to handle sign out
+        async function handleSignOut() {
+            try {
+                const response = await fetch('/signout', { method: 'POST' });
+                if (response.ok) {
+                    window.location.reload(); // Reload page to update button visibility
+                } else {
+                    console.error('Error signing out');
+                }
+            } catch (error) {
+                console.error('Error handling sign out:', error);
+            }
+        }
+
+        // Check login status and set up event listener for sign out button
+        checkLoginStatus().then(() => {
+            const signoutButton = document.getElementById('signout-button');
+            if (signoutButton) {
+                signoutButton.addEventListener('click', handleSignOut);
+            }
+        });
     </script>
 </body>
 </html>
