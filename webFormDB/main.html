@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Website</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            background: #f4f4f4;
+            text-align: center;
+            overflow-x: hidden;
+        }
+        .header {
+            position: relative;
+            padding: 40px;
+            background: #004080;
+            color: #fff;
+            border-bottom: 2px solid #ccc;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin: 0;
+        }
+        .header p {
+            font-size: 1.2em;
+            margin: 10px 0 20px;
+        }
+        .links {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px; /* Adds space between the links */
+        }
+        .links a {
+            padding: 10px 20px;
+            font-size: 1em;
+            text-decoration: none;
+            color: #fff;
+            background: #0056b3;
+            border-radius: 4px;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .links a:hover {
+            background: #003d7a;
+            transform: scale(1.03);
+        }
+        .centered-link {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            text-decoration: none;
+            color: #fff;
+            background: #0056b3;
+            border-radius: 4px;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .centered-link:hover {
+            background: #003d7a;
+            transform: scale(1.03);
+        }
+        .footer {
+            padding: 15px;
+            background: #002d62;
+            color: #fff;
+            border-top: 2px solid #ccc;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="links" id="auth-links">
+            <!-- Sign Up and Sign In buttons will be added/removed here -->
+        </div>
+        <h1>Welcome to Our Main Page</h1>
+        <p>Effortlessly manage your orders and account.</p>
+        <a href="/place-order" class="centered-link">Place an Order</a>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 My Website. All rights reserved.</p>
+    </div>
+
+    <script>
+        // Function to check if the user is logged in
+        async function checkLoginStatus() {
+            try {
+                const response = await fetch('/status');
+                const data = await response.json();
+                const authLinks = document.getElementById('auth-links');
+                
+                if (data.loggedIn) {
+                    // User is logged in, hide Sign Up and Sign In buttons
+                    authLinks.innerHTML = '';
+                } else {
+                    // User is not logged in, show Sign Up and Sign In buttons
+                    authLinks.innerHTML = `
+                        <a href="/signup">Sign Up</a>
+                        <a href="/signin">Sign In</a>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error checking login status:', error);
+            }
+        }
+
+        // Check login status when the page loads
+        checkLoginStatus();
+    </script>
+</body>
+</html>
